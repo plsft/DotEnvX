@@ -67,7 +67,7 @@ jobs:
       run: dotnet test --no-build --configuration Debug --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
     
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         files: '**/coverage.opencover.xml'
         flags: unittests
