@@ -15,7 +15,11 @@
       "Bash(git branch:*)",
       "Bash(git push:*)",
       "Bash(gh:*)",
-      "Bash(git remote remove:*)"
+      "Bash(git remote remove:*)",
+      "Read(/C:\\Work\\Experimental/**)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet tool install:*)",
+      "Bash(dotenvx:*)"
     ],
     "deny": [],
     "ask": []
