@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEnvX.CLI", "DotEnvX.CLI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEnvX.Samples", "DotEnvX.Samples\DotEnvX.Samples.csproj", "{4A85BE86-D6BF-46E4-A3C0-56DF066D5023}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotEnvX.Tool", "DotEnvX.Tool\DotEnvX.Tool.csproj", "{031422ED-835F-4408-A3E8-CDED799814F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{4A85BE86-D6BF-46E4-A3C0-56DF066D5023}.Release|x64.Build.0 = Release|Any CPU
 		{4A85BE86-D6BF-46E4-A3C0-56DF066D5023}.Release|x86.ActiveCfg = Release|Any CPU
 		{4A85BE86-D6BF-46E4-A3C0-56DF066D5023}.Release|x86.Build.0 = Release|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Debug|x64.Build.0 = Debug|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Debug|x86.Build.0 = Debug|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Release|x64.ActiveCfg = Release|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Release|x64.Build.0 = Release|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Release|x86.ActiveCfg = Release|Any CPU
+		{031422ED-835F-4408-A3E8-CDED799814F9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
