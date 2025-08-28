@@ -27,7 +27,8 @@ public static class DotEnvParser
         var result = new Dictionary<string, string>();
         
         // Remove BOM if present
-        if (content.StartsWith("\uFEFF"))
+        const char bomChar = '\uFEFF';
+        if (content.Length > 0 && content[0] == bomChar)
         {
             content = content.Substring(1);
         }
@@ -58,8 +59,13 @@ public static class DotEnvParser
                     var endQuoteIndex = FindClosingQuote(line, quoteChar);
                     if (endQuoteIndex >= 0)
                     {
+                        if (currentValue.Length > 0)
+                            currentValue.Append('\n');
                         currentValue.Append(line.Substring(0, endQuoteIndex));
-                        var value = ProcessValue(currentValue.ToString(), quoteChar, processEnv);
+                        var combinedEnv = new Dictionary<string, string>(processEnv);
+                        foreach (var kvp in result)
+                            combinedEnv[kvp.Key] = kvp.Value;
+                        var value = ProcessValue(currentValue.ToString(), quoteChar, combinedEnv);
                         
                         // Check for encryption
                         if (value.StartsWith("encrypted:") && !string.IsNullOrEmpty(options.PrivateKey))
@@ -76,7 +82,9 @@ public static class DotEnvParser
                     }
                     else
                     {
-                        currentValue.AppendLine(line);
+                        if (currentValue.Length > 0)
+                            currentValue.Append('\n');
+                        currentValue.Append(line);
                     }
                 }
                 continue;
@@ -103,7 +111,10 @@ public static class DotEnvParser
                     if (endQuoteIndex >= 0)
                     {
                         // Single line quoted value
-                        var value = ProcessValue(rawValue.Substring(1, endQuoteIndex), quoteChar, processEnv);
+                        var combinedEnv = new Dictionary<string, string>(processEnv);
+                        foreach (var kvp in result)
+                            combinedEnv[kvp.Key] = kvp.Value;
+                        var value = ProcessValue(rawValue.Substring(1, endQuoteIndex), quoteChar, combinedEnv);
                         
                         // Check for encryption
                         if (value.StartsWith("encrypted:") && !string.IsNullOrEmpty(options.PrivateKey))
@@ -123,7 +134,10 @@ public static class DotEnvParser
                 else
                 {
                     // Unquoted value
-                    var value = ProcessValue(rawValue, '\0', processEnv);
+                    var combinedEnv = new Dictionary<string, string>(processEnv);
+                    foreach (var kvp in result)
+                        combinedEnv[kvp.Key] = kvp.Value;
+                    var value = ProcessValue(rawValue, '\0', combinedEnv);
                     
                     // Check for encryption
                     if (value.StartsWith("encrypted:") && !string.IsNullOrEmpty(options.PrivateKey))
@@ -216,7 +230,7 @@ public static class DotEnvParser
         if (!value.StartsWith("encrypted:"))
             return value;
             
-        var encryptedPart = value.Substring("encrypted:".Length);
-        return DotEnvEncryption.Decrypt(encryptedPart, privateKey);
+        // Pass the full value including "encrypted:" prefix - DotEnvEncryption.Decrypt expects it
+        return DotEnvEncryption.Decrypt(value, privateKey);
     }
 }

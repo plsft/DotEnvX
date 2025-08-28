@@ -87,7 +87,7 @@ public class SetService
                 result.PrivateKey = privateKey;
                 result.PrivateKeyName = privateKeyName;
                 
-                // Encrypt the value
+                // Encrypt the value (DotEnvEncryption.Encrypt already adds "encrypted:" prefix)
                 var encryptedValue = DotEnvEncryption.Encrypt(_value, publicKey);
                 result.EncryptedValue = encryptedValue;
                 

@@ -7,10 +7,32 @@ using DotEnvX.Core.Encryption;
 
 namespace DotEnvX.Core;
 
+/// <summary>
+/// Main class for loading and managing environment variables from .env files
+/// </summary>
 public static class DotEnv
 {
     private static readonly Logger Logger = new();
     
+    /// <summary>
+    /// Loads environment variables from .env file(s) into the process environment
+    /// </summary>
+    /// <param name="options">Configuration options for loading .env files</param>
+    /// <returns>Result containing parsed values and any errors encountered</returns>
+    /// <example>
+    /// <code>
+    /// // Simple usage
+    /// var result = DotEnv.Config();
+    /// 
+    /// // With options
+    /// var result = DotEnv.Config(new DotEnvOptions
+    /// {
+    ///     Path = new[] { ".env", ".env.local" },
+    ///     Overload = true,
+    ///     Strict = false
+    /// });
+    /// </code>
+    /// </example>
     public static DotEnvConfigResult Config(DotEnvOptions? options = null)
     {
         options ??= new DotEnvOptions();
@@ -128,16 +150,44 @@ public static class DotEnv
         }
     }
     
+    /// <summary>
+    /// Parses .env file content into a dictionary without loading into environment
+    /// </summary>
+    /// <param name="src">The .env file content as a string</param>
+    /// <param name="options">Parsing options</param>
+    /// <returns>Dictionary of parsed key-value pairs</returns>
     public static Dictionary<string, string> Parse(string src, DotEnvParseOptions? options = null)
     {
         return DotEnvParser.Parse(src, options);
     }
     
+    /// <summary>
+    /// Parses .env file content from byte array into a dictionary without loading into environment
+    /// </summary>
+    /// <param name="src">The .env file content as bytes</param>
+    /// <param name="options">Parsing options</param>
+    /// <returns>Dictionary of parsed key-value pairs</returns>
     public static Dictionary<string, string> Parse(byte[] src, DotEnvParseOptions? options = null)
     {
         return DotEnvParser.Parse(src, options);
     }
     
+    /// <summary>
+    /// Sets an environment variable in .env file(s)
+    /// </summary>
+    /// <param name="key">Environment variable name</param>
+    /// <param name="value">Value to set</param>
+    /// <param name="options">Options for setting the value (encryption, file path, etc.)</param>
+    /// <returns>Result containing information about the operation</returns>
+    /// <example>
+    /// <code>
+    /// // Set plain value
+    /// DotEnv.Set("API_URL", "https://api.example.com");
+    /// 
+    /// // Set encrypted value
+    /// DotEnv.Set("API_SECRET", "secret-value", new SetOptions { Encrypt = true });
+    /// </code>
+    /// </example>
     public static SetOutput Set(string key, string value, SetOptions? options = null)
     {
         options ??= new SetOptions();
@@ -146,6 +196,12 @@ public static class DotEnv
         return setService.Run();
     }
     
+    /// <summary>
+    /// Gets the value of an environment variable from .env file(s)
+    /// </summary>
+    /// <param name="key">Environment variable name</param>
+    /// <param name="options">Options for getting the value</param>
+    /// <returns>The value of the environment variable, or null if not found</returns>
     public static string? Get(string key, GetOptions? options = null)
     {
         options ??= new GetOptions();
@@ -154,6 +210,13 @@ public static class DotEnv
         return getService.Run();
     }
     
+    /// <summary>
+    /// Lists all .env files in a directory
+    /// </summary>
+    /// <param name="directory">Directory to search (defaults to current directory)</param>
+    /// <param name="envFile">Patterns to include (defaults to .env* and *.env)</param>
+    /// <param name="excludeEnvFile">Patterns to exclude (defaults to .env.keys, .env.example, .env.vault)</param>
+    /// <returns>Array of .env file paths found</returns>
     public static string[] Ls(string? directory = null, string[]? envFile = null, string[]? excludeEnvFile = null)
     {
         directory ??= Directory.GetCurrentDirectory();
@@ -164,6 +227,12 @@ public static class DotEnv
         return lsService.Run();
     }
     
+    /// <summary>
+    /// Generates a .env.example file from an existing .env file
+    /// </summary>
+    /// <param name="directory">Directory containing the .env file</param>
+    /// <param name="envFile">Path to the .env file</param>
+    /// <returns>Result containing information about the generated example file</returns>
     public static GenExampleOutput GenExample(string? directory = null, string? envFile = null)
     {
         directory ??= Directory.GetCurrentDirectory();
@@ -173,16 +242,39 @@ public static class DotEnv
         return genExampleService.Run();
     }
     
+    /// <summary>
+    /// Generates a new public/private key pair for encryption
+    /// </summary>
+    /// <returns>A KeyPair containing the public and private keys</returns>
+    /// <example>
+    /// <code>
+    /// var keypair = DotEnv.GenerateKeypair();
+    /// File.WriteAllText(".env.keys", $"DOTENV_PRIVATE_KEY={keypair.PrivateKey}");
+    /// File.AppendAllText(".env", $"#DOTENV_PUBLIC_KEY={keypair.PublicKey}\n");
+    /// </code>
+    /// </example>
     public static DotEnvEncryption.KeyPair GenerateKeypair()
     {
         return DotEnvEncryption.GenerateKeyPair();
     }
     
+    /// <summary>
+    /// Encrypts a value using a public key
+    /// </summary>
+    /// <param name="value">The plain text value to encrypt</param>
+    /// <param name="publicKey">The public key to use for encryption</param>
+    /// <returns>The encrypted value with "encrypted:" prefix</returns>
     public static string Encrypt(string value, string publicKey)
     {
         return DotEnvEncryption.Encrypt(value, publicKey);
     }
     
+    /// <summary>
+    /// Decrypts a value using a private key
+    /// </summary>
+    /// <param name="encryptedValue">The encrypted value (with or without "encrypted:" prefix)</param>
+    /// <param name="privateKey">The private key to use for decryption</param>
+    /// <returns>The decrypted plain text value</returns>
     public static string Decrypt(string encryptedValue, string privateKey)
     {
         return DotEnvEncryption.Decrypt(encryptedValue, privateKey);
