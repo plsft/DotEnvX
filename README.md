@@ -448,6 +448,68 @@ This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICE
 - [Report Issues](https://github.com/plsft/DotEnvX/issues)
 - [Discussions](https://github.com/plsft/DotEnvX/discussions)
 
+## 🆚 DotEnvX vs dotnet user-secrets
+
+### Why Choose DotEnvX?
+
+While `dotnet user-secrets` is great for basic development scenarios, DotEnvX provides a comprehensive solution for both development and production environments.
+
+### Feature Comparison
+
+| Feature | DotEnvX | dotnet user-secrets |
+|---------|---------|---------------------|
+| **Development secrets** | ✅ Excellent | ✅ Excellent |
+| **Production support** | ✅ Full support | ❌ Dev only |
+| **Encryption** | ✅ ECIES encryption | ❌ Plain text |
+| **Source control** | ✅ Safe (encrypted) | ❌ Cannot commit |
+| **CI/CD integration** | ✅ Excellent | ❌ Not suitable |
+| **Multi-language support** | ✅ Universal .env | ❌ .NET only |
+| **Docker/containers** | ✅ Native support | ❌ Not suitable |
+| **Variable expansion** | ✅ `${VAR}` syntax | ❌ Not supported |
+| **Multiple environments** | ✅ Built-in layering | ⚠️ Limited |
+| **CLI tools** | ✅ Comprehensive | ⚠️ Basic |
+| **Team collaboration** | ✅ Via encryption | ⚠️ Manual sharing |
+| **File format** | ✅ Industry standard | ⚠️ JSON only |
+| **VS integration** | ⚠️ Via extension | ✅ Built-in |
+
+### Key Advantages of DotEnvX
+
+1. **Production-Ready Encryption**: ECIES encryption allows safe storage of encrypted secrets in source control, with separate key management
+2. **Universal Format**: .env files work across all platforms and languages, perfect for polyglot teams
+3. **Advanced Features**: Variable expansion, multiple file support, and environment-specific configurations
+4. **DevOps Friendly**: Designed for modern CI/CD pipelines and container deployments
+5. **Team Collaboration**: Encrypted secrets can be shared via Git with secure key distribution
+
+### When to Use Each
+
+**Use DotEnvX when you need:**
+- Production-grade secret management
+- Encrypted secrets in source control
+- Multi-environment deployments
+- Cross-platform compatibility
+- Docker/Kubernetes deployments
+- Team collaboration on secrets
+
+**Use dotnet user-secrets when:**
+- Working on simple .NET-only projects
+- Only need local development secrets
+- Prefer built-in Visual Studio integration
+- Don't need production deployment
+
+### Migration from user-secrets
+
+```csharp
+// Before (user-secrets)
+builder.Configuration.AddUserSecrets<Program>();
+
+// After (DotEnvX) 
+builder.Configuration.AddDotEnvX(options =>
+{
+    options.Path = new[] { ".env", ".env.local" };
+    options.Overload = true;
+});
+```
+
 ---
 
 <div align="center">
